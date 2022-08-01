@@ -822,6 +822,7 @@ endif
 ifeq ($(strip $(PS2_ENABLE)), yes)
     COMMON_VPATH += $(DRIVER_PATH)/ps2
     COMMON_VPATH += $(PLATFORM_PATH)/$(PLATFORM_KEY)/$(DRIVER_DIR)/ps2
+    SRC += ps2_vendor.c # TODO: Make this properly
     OPT_DEFS += -DPS2_ENABLE
 endif
 
