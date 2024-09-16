@@ -1,0 +1,115 @@
+diff --git a/keyboards/thinkpad/config.h b/keyboards/thinkpad/config.h
+index 7eeef43e92..6138c6eaf4 100644
+--- a/keyboards/thinkpad/config.h
++++ b/keyboards/thinkpad/config.h
+@@ -6,14 +6,15 @@
+ #include "config_common.h"
+ 
+ #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
+-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP25
++// #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP25
+ #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 500U
+ #define RP2040_FLASH_GENERIC_03H
+ 
+ 
++#define MATRIX_MASKED
+ 
+ 
+-// #define PS2_MOUSE_USE_REMOTE_MODE
++#define PS2_MOUSE_USE_REMOTE_MODE
+ #define PS2_DATA_PIN GP1
+ #define PS2_CLOCK_PIN GP2
+ 
+diff --git a/keyboards/thinkpad/info.json b/keyboards/thinkpad/info.json
+index 2edf55e0ee..c20cf0c69a 100644
+--- a/keyboards/thinkpad/info.json
++++ b/keyboards/thinkpad/info.json
+@@ -13,8 +13,8 @@
+         "nkro": true
+     },
+     "matrix_pins": {
+-        "cols": ["GP18", "GP16", "GP14", "GP12", "GP8", "GP9", "GP11", "GP13", "GP10", "GP17", "GP15", "GP7", "GP5", "GP3", "GP6", "GP4"],
+-        "rows": ["GP21", "GP25", "GP23", "GP22", "GP24", "GP20", "GP26", "GP27"]
++        "cols": ["GP22", "GP20", "GP18", "GP16", "GP12", "GP13", "GP15", "GP17", "GP14", "GP21", "GP19", "GP23", "GP25", "GP27", "GP24", "GP26"],
++        "rows": ["GP9", "GP5", "GP7", "GP8", "GP6", "GP10", "GP4", "GP3", "GP11"]
+     },
+     "processor": "RP2040",
+     "url": "",
+@@ -23,6 +23,13 @@
+         "pid": "0x0000",
+         "vid": "0xFEED"
+     },
++    "ps2": {
++        "enabled": true,
++        "mouse_enabled": true,
++        "clock_pin": 1,
++        "data_pin": 2,
++        "driver": "vendor"
++    },
+     "layouts": {
+         "LAYOUT_all": {
+             "layout": [
+diff --git a/keyboards/thinkpad/keymaps/default/keymap.c b/keyboards/thinkpad/keymaps/default/keymap.c
+index 7cf4893c94..901133be66 100644
+--- a/keyboards/thinkpad/keymaps/default/keymap.c
++++ b/keyboards/thinkpad/keymaps/default/keymap.c
+@@ -11,15 +11,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+         KC_1, KC_2, KC_3, KC_4, KC_7, KC_8, KC_9, KC_0, KC_F10, KC_F12, KC_F11, KC_PGDN, KC_END, KC_PSCR, XXXXXXX/*??*/, XXXXXXX/*??*/,
+         KC_Q, KC_W, KC_E, KC_R, KC_U, KC_I, KC_O, KC_P, XXXXXXX/*??*/, XXXXXXX/*??*/, KC_KB_VOLUME_UP, XXXXXXX/*??*/, XXXXXXX/*??*/, KC_SCROLL_LOCK, XXXXXXX/*??*/, XXXXXXX/*??*/,
+         KC_TAB, KC_CAPS, KC_F3, KC_T, KC_Y, KC_RIGHT_BRACKET, KC_F7, KC_LEFT_BRACKET, KC_BACKSPACE, KC_LEFT_GUI, KC_AUDIO_VOL_DOWN, XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/, KC_LEFT_SHIFT, XXXXXXX,
+-        KC_A, KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, KC_SEMICOLON, KC_BACKSLASH, XXXXXXX, KC_KB_MUTE, KC_MENU, XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/,
+-        KC_ESC, KC_NONUS_BACKSLASH, KC_F4, KC_G, KC_H, KC_F6, XXXXXXX, KC_QUOTE, KC_F5, XXXXXXX/*??*/, XXXXXXX /* IBM -y */, XXXXXXX/*??*/, KC_UP, KC_LEFT_ALT, XXXXXXX/*??*/, XXXXXXX/*??*/,
+-        KC_Z, KC_X, KC_C, KC_V, KC_M, KC_COMMA, KC_DOT, KC_BACKSLASH, KC_ENTER, KC_F15, XXXXXXX/*KC_Mic*/, XXXXXXX/*KC_PgBk*/, KC_PAUSE, XXXXXXX/*??*/, KC_RIGHT_SHIFT, KC_RIGHT_CTRL,
++        KC_A, KC_S, KC_D, KC_F, KC_J, KC_K, KC_L, KC_SEMICOLON, KC_BACKSLASH, XXXXXXX, KC_KB_MUTE, KC_APP/*KC_MENU*/, XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/,
++        KC_ESC, KC_NONUS_BACKSLASH, KC_F4, KC_G, KC_H, KC_F6, XXXXXXX, KC_QUOTE, KC_F5, XXXXXXX/*??*/, KC_F13 /* IBM -y */, XXXXXXX/*??*/, KC_UP, KC_LEFT_ALT, XXXXXXX/*??*/, XXXXXXX/*??*/,
++        KC_Z, KC_X, KC_C, KC_V, KC_M, KC_COMMA, KC_DOT, KC_BACKSLASH, KC_ENTER, KC_F15, XXXXXXX/*KC_Mic*/, QK_BOOT/*KC_PgBk*/, KC_PAUSE, XXXXXXX/*??*/, KC_RIGHT_SHIFT, KC_RIGHT_CTRL,
+         XXXXXXX/*??*/, XXXXXXX/*??*/, XXXXXXX/*??*/, KC_B, KC_N, XXXXXXX/*??*/, XXXXXXX/*??*/, KC_SLASH, KC_SPACE, KC_RIGHT, KC_DOWN, /*KC_PgFd*/XXXXXXX, KC_LEFT, KC_RIGHT_ALT, XXXXXXX/*??*/, XXXXXXX/*??*/
+-        //XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+-        //XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+-//        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+-     //    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+-     ////   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+-
++        // TODO: Instead of QK_BOOT on the keys on by the arrow buttons
+     )
+ };
+diff --git a/keyboards/thinkpad/rules.mk b/keyboards/thinkpad/rules.mk
+index 46e6fa18fb..7cbef8285d 100644
+--- a/keyboards/thinkpad/rules.mk
++++ b/keyboards/thinkpad/rules.mk
+@@ -3,3 +3,6 @@ TMK_COMMON_DEFS += -Wno-array-bounds -DPICO_RP2040_USB_DEVICE_ENUMERATION_FIX=1
+ PS2_MOUSE_ENABLE = yes
+ PS2_ENABLE = yes
+ PS2_DRIVER = vendor
++# PS2_MOUSE_USE_REMOTE_MODE = yes
++# SRC += matrix.c
++# CUSTOM_MATRIX = yes
+diff --git a/keyboards/thinkpad/thinkpad.c b/keyboards/thinkpad/thinkpad.c
+index 19fd2095d4..c57f82ad0b 100644
+--- a/keyboards/thinkpad/thinkpad.c
++++ b/keyboards/thinkpad/thinkpad.c
+@@ -7,6 +7,22 @@ void keyboard_post_init_user(void) {
+   // Customise these values to desired behaviour
+   debug_enable=true;
+   debug_matrix=true;
+-  //debug_keyboard=true;
+-  //debug_mouse=true;
++  debug_keyboard=true;
++//   debug_mouse=true;
++}
++
++const matrix_row_t matrix_mask[] = {
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b1111111111111111,
++    0b0000000000000001,
++};
++
++void led_update_ports(led_t led_state) {
++    print("Update ports!\n");
+ }
