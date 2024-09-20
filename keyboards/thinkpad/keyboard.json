@@ -21,7 +21,7 @@
     "usb": {
         "device_version": "1.0.0",
         "pid": "0x0000",
-        "vid": "0xFEED"
+        "vid": "0x4243"
     },
     "ps2": {
         "enabled": true,
@@ -164,5 +164,8 @@
                 { "matrix": [8, 0], "x": 0, "y": 8 }
             ]
         }
+    },
+    "bootmagic": {
+        "matrix": [5, 0]
     }
 }
